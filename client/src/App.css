@@ -1,0 +1,29 @@
+main {
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  width: 100vw;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+}
+.navbar {
+  background: #3d3c3c;
+  height: 60px;
+  align-items: center;
+  display: flex;
+}
+
+.navbar ul {
+  display: flex;
+  margin: auto;
+}
+.navbar ul li {
+  list-style: none;
+  padding: 10px;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: #fff;
+}
