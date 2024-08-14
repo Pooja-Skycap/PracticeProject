@@ -36,8 +36,10 @@ const userSlice = createSlice({
       };
     },
     clearAlert: (state) => {
+      state.user = null;
       state.alert.message = "";
     },
+    
     showLoader: (state) => {
       state.status = "loading";
     },

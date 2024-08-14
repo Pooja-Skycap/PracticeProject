@@ -1,7 +1,6 @@
 import { AppDispatch, RootState } from "../../store/configureStore";
 import { fetchUserById, submitUser, updateUser } from "../../store/users/thunk";
 import {
-  TextField,
   Button,
   FormControl,
   InputLabel,
@@ -24,10 +23,12 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 import { userSchema, UserFormValues } from "../../utils/validationSchema";
 import { clearAlert } from "../../store/users/slice";
+import TextFieldInput from "./TextFieldInput";
 
 const UserForm = () => {
   const navigate = useNavigate();
   const { userId } = useParams<{ userId: string }>();
+  console.log("userId", userId);
   const dispatch = useDispatch<AppDispatch>();
   const alert = useSelector((state: RootState) => state.users.alert);
   const user = useSelector((state: RootState) => state.users.user);
@@ -50,9 +51,21 @@ const UserForm = () => {
 
   useEffect(() => {
     if (userId) {
-      dispatch(fetchUserById(userId));
+      const result = dispatch(fetchUserById(userId));
+      console.log("result", result);
+    } else {
+      reset({
+        name: "",
+        age: 0,
+        address: "",
+        status: "active",
+      });
     }
-  }, [userId, dispatch]);
+    return () => {
+      dispatch(clearAlert());
+      reset();
+    };
+  }, [userId, dispatch, reset]);
 
   useEffect(() => {
     if (user) {
@@ -103,56 +116,26 @@ const UserForm = () => {
         }}
       >
         {status === "loading" && <div>Loading...</div>}
-
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <FormControl fullWidth margin="normal" error={!!errors.name}>
-            <Controller
-              name="name"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Name"
-                  variant="outlined"
-                  error={!!errors.name}
-                  helperText={errors.name?.message}
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl fullWidth margin="normal" error={!!errors.age}>
-            <Controller
-              name="age"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Age"
-                  type="number"
-                  variant="outlined"
-                  error={!!errors.age}
-                  helperText={errors.age?.message}
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl fullWidth margin="normal" error={!!errors.address}>
-            <Controller
-              name="address"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Address"
-                  variant="outlined"
-                  error={!!errors.address}
-                  helperText={errors.address?.message}
-                />
-              )}
-            />
-          </FormControl>
+          <TextFieldInput
+            name="name"
+            control={control}
+            label="Name"
+            errors={errors}
+          />
+          <TextFieldInput
+            name="age"
+            control={control}
+            label="Age"
+            type="number"
+            errors={errors}
+          />
+          <TextFieldInput
+            name="address"
+            control={control}
+            label="Address"
+            errors={errors}
+          />
 
           <FormControl fullWidth margin="normal" error={!!errors.status}>
             <InputLabel>Status</InputLabel>

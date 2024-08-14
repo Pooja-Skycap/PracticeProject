@@ -5,10 +5,17 @@ export {
   Routes,
   Route,
   NavLink,
-  useNavigate,useParams
+  useNavigate,
+  useParams,
 } from "react-router-dom";
 
 export { useForm, Controller } from "react-hook-form";
+export type {
+  FieldValues,
+  UseControllerProps,
+  Path,
+  FieldError,
+} from "react-hook-form";
 export type { Dispatch } from "redux";
 export { createRoot } from "react-dom/client";
 export { configureStore } from "@reduxjs/toolkit";

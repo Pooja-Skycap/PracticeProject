@@ -5,7 +5,7 @@ const CreateUsers = () => {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "93vh",
         backgroundColor: "#e9e9e9",
         display: "flex",
         alignItems: "center",

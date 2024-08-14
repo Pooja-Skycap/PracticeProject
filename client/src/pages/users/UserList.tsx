@@ -24,6 +24,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { RootState, AppDispatch } from "../../store/configureStore";
 import { deleteUser, fetchUsers } from "../../store/users/thunk";
 import { clearAlert } from "../../store/users/slice";
+import { InnerContainer, UserContainer } from "./UserListStyle";
 
 const UserList = () => {
   const navigate = useNavigate();
@@ -133,19 +134,11 @@ const UserList = () => {
   ];
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-        padding: "20px",
-      }}
-    >
-      <div style={{ height: "90vh", width: "100%", maxWidth: "90vw" }}>
+    <UserContainer>
+      <InnerContainer>
         <Box
           sx={{
-            height: 400,
+            height: "64vh",
             width: "100%",
           }}
         >
@@ -167,13 +160,13 @@ const UserList = () => {
             checkboxSelection
             initialState={{
               pagination: {
-                paginationModel: { pageSize: 5, page: 0 },
+                paginationModel: { pageSize: 10, page: 0 },
               },
               sorting: {
                 sortModel: [{ field: "username", sort: "asc" }],
               },
             }}
-            pageSizeOptions={[5, 10, 20]}
+            pageSizeOptions={[10, 20, 50, 100]}
           />
         </Box>
         <ToastContainer
@@ -201,8 +194,8 @@ const UserList = () => {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
-    </div>
+      </InnerContainer>
+    </UserContainer>
   );
 };
 

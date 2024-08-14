@@ -7,8 +7,8 @@ export interface UserResponse {
 }
 
 export interface UserState {
-  users: UserResponse[]; 
-  user?: UserResponse; 
+  users: UserResponse[];
+  user?: UserResponse | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   alert: {
     message: string;
