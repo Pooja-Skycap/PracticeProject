@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from "../../store/configureStore";
-import { submitUser } from "../../store/users/thunk";
+import { fetchUserById, submitUser } from "../../store/users/thunk";
 import {
   TextField,
   Button,
@@ -18,21 +18,25 @@ import {
   ToastContainer,
   useEffect,
   useSelector,
+  useNavigate,
+  useParams,
 } from "../../utils/commonImports";
 import "react-toastify/dist/ReactToastify.css";
 import { userSchema, UserFormValues } from "../../utils/validationSchema";
 import { clearAlert } from "../../store/users/slice";
 
-const selectAlert = (state: RootState) => state.users.alert;
-const selectStatus = (state: RootState) => state.users.status;
-
 const UserForm = () => {
+  const navigate = useNavigate();
+  const { userId } = useParams<{ userId: string }>();
   const dispatch = useDispatch<AppDispatch>();
-  const alert = useSelector(selectAlert);
-  const status = useSelector(selectStatus);
+  const alert = useSelector((state: RootState) => state.users.alert);
+  const user = useSelector((state: RootState) => state.users.user);
+  const status = useSelector((state: RootState) => state.users.status);
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<UserFormValues>({
     resolver: zodResolver(userSchema),
@@ -43,9 +47,28 @@ const UserForm = () => {
       status: "active",
     },
   });
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserById(userId));
+    }
+  }, [userId, dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      reset({
+        name: user.name || "",
+        age: user.age || 0,
+        address: user.address || "",
+        status: user.status || "active",
+      });
+    }
+  }, [user, reset]);
+
   const onSubmit = async (data: UserFormValues) => {
     try {
       const result = await dispatch(submitUser(data)).unwrap();
+      navigate("/users");
       console.log("Form Data:", result);
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -59,7 +82,7 @@ const UserForm = () => {
       } else if (alert.type === "error") {
         toast.error(alert.message);
       }
-      dispatch(clearAlert()); 
+      dispatch(clearAlert());
     }
   }, [alert, dispatch]);
 
