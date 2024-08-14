@@ -46,3 +46,18 @@ export const postRequest = async (
   }
 };
 
+export const getRequest = async (endpoint: string) => {
+  try {
+    const response = await Axios.get<UserResponse[]>(getApiPath(endpoint));
+    console.log("response", response);
+    return response.data;
+  } catch (error) {
+    if (Axios.isAxiosError(error)) {
+      console.error("API request failed:", error.message);
+      throw error;
+    } else {
+      console.error("Unexpected error:", error);
+      throw new Error("An unexpected error occurred");
+    }
+  }
+};

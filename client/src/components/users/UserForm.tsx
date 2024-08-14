@@ -1,4 +1,4 @@
-import { RootState } from "../../store/configureStore";
+import { AppDispatch, RootState } from "../../store/configureStore";
 import { submitUser } from "../../store/users/thunk";
 import {
   TextField,
@@ -14,11 +14,22 @@ import {
   Box,
   Container,
   useDispatch,
+  toast,
+  ToastContainer,
+  useEffect,
+  useSelector,
 } from "../../utils/commonImports";
+import "react-toastify/dist/ReactToastify.css";
 import { userSchema, UserFormValues } from "../../utils/validationSchema";
+import { clearAlert } from "../../store/users/slice";
+
+const selectAlert = (state: RootState) => state.users.alert;
+const selectStatus = (state: RootState) => state.users.status;
 
 const UserForm = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const alert = useSelector(selectAlert);
+  const status = useSelector(selectStatus);
   const {
     control,
     handleSubmit,
@@ -34,12 +45,24 @@ const UserForm = () => {
   });
   const onSubmit = async (data: UserFormValues) => {
     try {
-      const result = await dispatch(submitUser(data) as any);
+      const result = await dispatch(submitUser(data)).unwrap();
       console.log("Form Data:", result);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
+
+  useEffect(() => {
+    if (alert.message) {
+      if (alert.type === "success") {
+        toast.success(alert.message);
+      } else if (alert.type === "error") {
+        toast.error(alert.message);
+      }
+      dispatch(clearAlert()); 
+    }
+  }, [alert, dispatch]);
+
   return (
     <Container component="main" maxWidth="md">
       <Box
@@ -50,6 +73,8 @@ const UserForm = () => {
           mt: 5,
         }}
       >
+        {status === "loading" && <div>Loading...</div>}
+
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <FormControl fullWidth margin="normal" error={!!errors.name}>
             <Controller
@@ -121,6 +146,17 @@ const UserForm = () => {
             Submit
           </Button>
         </form>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </Box>
     </Container>
   );
