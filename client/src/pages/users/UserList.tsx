@@ -18,7 +18,7 @@ import {
   DeleteButton,
   IconButton,
   useState,
-  useNavigate
+  useNavigate,
 } from "../../utils/commonImports";
 import "react-toastify/dist/ReactToastify.css";
 import { RootState, AppDispatch } from "../../store/configureStore";
@@ -62,7 +62,7 @@ const UserList = () => {
     navigate(`/createUser/${userId}`);
   };
 
-  const handleDeleteClick = (userId: string) => {  
+  const handleDeleteClick = (userId: string) => {
     setUserToDelete(userId);
     setOpenDialog(true);
   };
@@ -115,7 +115,10 @@ const UserList = () => {
       minWidth: 150,
       renderCell: (params) => (
         <Box sx={{ display: "flex", gap: 1 }}>
-          <IconButton onClick={() => handleEdit(params.row._id)} color="primary">
+          <IconButton
+            onClick={() => handleEdit(params.row._id)}
+            color="primary"
+          >
             <EditButton />
           </IconButton>
           <IconButton

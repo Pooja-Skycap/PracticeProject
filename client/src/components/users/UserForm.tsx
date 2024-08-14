@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from "../../store/configureStore";
-import { fetchUserById, submitUser } from "../../store/users/thunk";
+import { fetchUserById, submitUser, updateUser } from "../../store/users/thunk";
 import {
   TextField,
   Button,
@@ -67,9 +67,15 @@ const UserForm = () => {
 
   const onSubmit = async (data: UserFormValues) => {
     try {
-      const result = await dispatch(submitUser(data)).unwrap();
+      if (userId) {
+        const result = await dispatch(
+          updateUser({ userId, userData: { ...data, _id: userId } })
+        ).unwrap();
+        console.log("User updated:", result);
+      } else {
+        await dispatch(submitUser(data)).unwrap();
+      }
       navigate("/users");
-      console.log("Form Data:", result);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -166,7 +172,7 @@ const UserForm = () => {
           </FormControl>
 
           <Button type="submit" variant="contained" color="primary">
-            Submit
+            {userId ? "Update" : "Submit"}
           </Button>
         </form>
         <ToastContainer
