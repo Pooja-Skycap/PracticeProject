@@ -1,4 +1,5 @@
 export interface UserResponse {
+  _id?: string;
   name: string;
   age: number;
   address: string;
@@ -6,7 +7,8 @@ export interface UserResponse {
 }
 
 export interface UserState {
-  users: UserResponse[]; // Replace `any` with the actual user type
+  users: UserResponse[]; 
+  user?: UserResponse; 
   status: "idle" | "loading" | "succeeded" | "failed";
   alert: {
     message: string;

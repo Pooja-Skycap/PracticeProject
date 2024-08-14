@@ -46,18 +46,53 @@ export const postRequest = async (
   }
 };
 
-export const getRequest = async (endpoint: string) => {
+export const getRequest = async <T>(
+  endpoint: string,
+  dispatch: Dispatch
+): Promise<T> => {
   try {
-    const response = await Axios.get<UserResponse[]>(getApiPath(endpoint));
-    console.log("response", response);
+    const response = await Axios.get<T>(getApiPath(endpoint));
+    dispatch(showSuccessAlert({ message: "Data fetched successfully!" }));
+
     return response.data;
   } catch (error) {
-    if (Axios.isAxiosError(error)) {
-      console.error("API request failed:", error.message);
-      throw error;
-    } else {
-      console.error("Unexpected error:", error);
-      throw new Error("An unexpected error occurred");
-    }
+    dispatch(showErrorAlert({ message: "Failed to fetch data." }));
+    throw error;
+  } finally {
+    dispatch(hideLoader());
+  }
+};
+
+export const deleteRequest = async (endpoint: string, dispatch: Dispatch) => {
+  try {
+    const response = await Axios.delete<UserResponse[]>(getApiPath(endpoint));
+    dispatch(showSuccessAlert({ message: "Data Deleted Succesfully" }));
+    return response.data;
+  } catch (error) {
+    dispatch(showErrorAlert({ message: "Failed to delete data." }));
+    throw error;
+  } finally {
+    dispatch(hideLoader());
+  }
+};
+
+export const updateRequest = async (
+  endpoint: string,
+  updateData: UserResponse,
+  dispatch: Dispatch
+): Promise<UserResponse> => {
+  dispatch(showLoader());
+  try {
+    const response = await Axios.patch<UserResponse>(
+      getApiPath(endpoint),
+      updateData
+    );
+    dispatch(showSuccessAlert({ message: "User updated successfully!" }));
+    return response.data;
+  } catch (error) {
+    dispatch(showErrorAlert({ message: "Failed to update user." }));
+    throw error;
+  } finally {
+    dispatch(hideLoader());
   }
 };

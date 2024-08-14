@@ -16,7 +16,6 @@ function App() {
             <li>
               <NavLink to="/createUser">Create Users</NavLink>
             </li>
-
             <li>
               <NavLink to="/users">UserList</NavLink>
             </li>
@@ -25,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/createUser" element={<CreateUsers />} />
+          <Route path="/createUser/:userId" element={<CreateUsers />} />
           <Route path="/users" element={<UserList />} />
         </Routes>
       </Router>

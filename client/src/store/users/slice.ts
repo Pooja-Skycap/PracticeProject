@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { alertParamsInterface, UserResponse } from "./types";
 import { UserState } from "./types";
-import { fetchUsers } from "./thunk";
+import { deleteUser, fetchUserById, fetchUsers, updateUser } from "./thunk";
 
 const initialState: UserState = {
   users: [],
+  user: undefined,
   status: "idle",
   alert: {
     message: "",
@@ -35,10 +36,7 @@ const userSlice = createSlice({
       };
     },
     clearAlert: (state) => {
-      state.alert = {
-        message: "",
-        type: "success",
-      };
+      state.alert.message = "";
     },
     showLoader: (state) => {
       state.status = "loading";
@@ -59,7 +57,32 @@ const userSlice = createSlice({
       })
       .addCase(fetchUsers.rejected, (state) => {
         state.status = "failed";
-      });
+      })
+      .addCase(deleteUser.fulfilled, (state, action: PayloadAction<string>) => {
+        state.users = state.users.filter((user) => user._id !== action.payload);
+      })
+      .addCase(fetchUserById.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        fetchUserById.fulfilled,
+        (state, action: PayloadAction<UserResponse>) => {
+          state.user = action.payload; // Ensure this is a single UserResponse
+          state.status = "succeeded";
+        }
+      )
+      .addCase(fetchUserById.rejected, (state) => {
+        state.status = "failed";
+      })
+      .addCase(
+        updateUser.fulfilled,
+        (state, action: PayloadAction<UserResponse>) => {
+          state.users = state.users.map((user) =>
+            user._id === action.payload._id ? action.payload : user
+          );
+          state.status = "succeeded";
+        }
+      );
   },
 });
 
