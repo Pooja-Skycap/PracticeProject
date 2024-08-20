@@ -28,7 +28,6 @@ import TextFieldInput from "./TextFieldInput";
 const UserForm = () => {
   const navigate = useNavigate();
   const { userId } = useParams<{ userId: string }>();
-  console.log("userId", userId);
   const dispatch = useDispatch<AppDispatch>();
   const alert = useSelector((state: RootState) => state.users.alert);
   const user = useSelector((state: RootState) => state.users.user);

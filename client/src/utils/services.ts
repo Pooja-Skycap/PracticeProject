@@ -8,7 +8,7 @@ import {
   showSuccessAlert,
   showErrorAlert,
 } from "../store/users/slice";
-import { UserResponse } from "../store/users";
+import { UserResponse } from "../store/users/types";
 
 const BASE_PATH = import.meta.env.VITE_BACKEND_BASE_URL;
 const getApiPath = (endpoint: string) => BASE_PATH + endpoint;

@@ -24,7 +24,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { RootState, AppDispatch } from "../../store/configureStore";
 import { deleteUser, fetchUsers } from "../../store/users/thunk";
 import { clearAlert } from "../../store/users/slice";
-import { InnerContainer, UserContainer } from "./UserListStyle";
+import {
+  FormHeading,
+  InnerContainer,
+  StyledBox,
+  UserContainer,
+} from "./UserListStyle";
 
 const UserList = () => {
   const navigate = useNavigate();
@@ -41,7 +46,6 @@ const UserList = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("alert", alert);
     if (alert.message && !alertShown.current) {
       if (alert.type === "success") {
         toast.success(alert.message);
@@ -136,23 +140,10 @@ const UserList = () => {
   return (
     <UserContainer>
       <InnerContainer>
-        <Box
-          sx={{
-            height: "64vh",
-            width: "100%",
-          }}
-        >
-          <Typography
-            variant="h4"
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            gutterBottom
-          >
+        <StyledBox>
+          <FormHeading variant="h4" gutterBottom>
             User List
-          </Typography>
+          </FormHeading>
           <DataGrid
             getRowId={(row) => row._id}
             rows={usersWithIndex}
@@ -168,7 +159,7 @@ const UserList = () => {
             }}
             pageSizeOptions={[10, 20, 50, 100]}
           />
-        </Box>
+        </StyledBox>
         <ToastContainer
           position="top-right"
           autoClose={5000}
