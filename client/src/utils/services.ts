@@ -53,6 +53,7 @@ export const getRequest = async <T>(
   try {
     const response = await Axios.get<T>(getApiPath(endpoint));
     dispatch(showSuccessAlert({ message: "Data fetched successfully!" }));
+
     return response.data;
   } catch (error) {
     dispatch(showErrorAlert({ message: "Failed to fetch data." }));

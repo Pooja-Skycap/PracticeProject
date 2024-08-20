@@ -13,7 +13,6 @@ import {
   DialogTitle,
   toast,
   ToastContainer,
-  useRef,
   EditButton,
   DeleteButton,
   IconButton,
@@ -21,7 +20,7 @@ import {
   useNavigate,
 } from "../../utils/commonImports";
 import "react-toastify/dist/ReactToastify.css";
-import { RootState, AppDispatch }  from "../../store/configureStore";
+import { RootState, AppDispatch } from "../../store/configureStore";
 import { deleteUser, fetchUsers } from "../../store/users/thunk";
 import { clearAlert } from "../../store/users/slice";
 import {
@@ -39,7 +38,7 @@ const UserList = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [userToDelete, setUserToDelete] = useState<string | null>(null);
 
-  const alertShown = useRef(false);
+  //const alertShown = useRef(false);
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -47,13 +46,13 @@ const UserList = () => {
   }, []);
 
   useEffect(() => {
-    if (alert.message && !alertShown.current) {
+    if (alert.message) {
+      toast.dismiss();
       if (alert.type === "success") {
         toast.success(alert.message);
       } else if (alert.type === "error") {
         toast.error(alert.message);
       }
-      alertShown.current = true;
 
       dispatch(clearAlert());
     }
@@ -73,7 +72,7 @@ const UserList = () => {
     setOpenDialog(true);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (userToDelete) {
       try {
         dispatch(deleteUser(userToDelete)).unwrap();

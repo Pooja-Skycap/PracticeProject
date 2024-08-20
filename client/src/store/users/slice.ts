@@ -69,7 +69,7 @@ const userSlice = createSlice({
       .addCase(
         fetchUserById.fulfilled,
         (state, action: PayloadAction<UserResponse>) => {
-          state.user = action.payload; // Ensure this is a single UserResponse
+          state.user = action.payload;
           state.status = "succeeded";
         }
       )

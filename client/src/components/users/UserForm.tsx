@@ -60,14 +60,15 @@ const UserForm = () => {
         status: "active",
       });
     }
+    console.log("here");
     return () => {
       dispatch(clearAlert());
-      reset();
     };
   }, [userId]);
 
   useEffect(() => {
-    if (user) {
+    console.log("here!!!");
+    if (user && userId) {
       reset({
         name: user.name || "",
         age: user.age || 0,
@@ -75,7 +76,7 @@ const UserForm = () => {
         status: user.status || "active",
       });
     }
-  }, [user]);
+  }, [user, userId]);
 
   const onSubmit = (data: UserFormValues) => {
     try {
@@ -95,6 +96,8 @@ const UserForm = () => {
 
   useEffect(() => {
     if (alert.message) {
+      console.log('alert', alert)
+      toast.dismiss();
       if (alert.type === "success") {
         toast.success(alert.message);
       } else if (alert.type === "error") {
