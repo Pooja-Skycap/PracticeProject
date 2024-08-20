@@ -6,12 +6,18 @@ import {
   updateRequest,
 } from "../../utils/services";
 import { UserResponse } from "./types";
+import {
+  CREATE_USER,
+  DELETE_USER,
+  EDIT_USER,
+  GET_USER,
+  GET_USER_BY_ID,
+} from "../../constants/endpoints";
 
 export const submitUser = createAsyncThunk(
   "user/submitUser",
   async (userData: UserResponse, { dispatch }) => {
-    
-    const result = await postRequest("/users/create", userData, dispatch);
+    const result = await postRequest(CREATE_USER, userData, dispatch);
     return result;
   }
 );
@@ -19,7 +25,7 @@ export const submitUser = createAsyncThunk(
 export const fetchUsers = createAsyncThunk<UserResponse[], void>(
   "user/fetchUsers",
   async (_, { dispatch }) => {
-    const users = await getRequest<UserResponse[]>("/users/get", dispatch);
+    const users = await getRequest<UserResponse[]>(GET_USER, dispatch);
     return users;
   }
 );
@@ -27,7 +33,7 @@ export const fetchUsers = createAsyncThunk<UserResponse[], void>(
 export const deleteUser = createAsyncThunk(
   "user/deleteUser",
   async (userId: string, { dispatch }) => {
-    await deleteRequest(`/users/delete/${userId}`, dispatch);
+    await deleteRequest(`${DELETE_USER}/${userId}`, dispatch);
     return userId;
   }
 );
@@ -39,7 +45,7 @@ export const updateUser = createAsyncThunk(
     { dispatch }
   ) => {
     const result = await updateRequest(
-      `/users/edit/${userId}`,
+      `${EDIT_USER}/${userId}`,
       userData,
       dispatch
     );
@@ -51,7 +57,7 @@ export const fetchUserById = createAsyncThunk(
   "user/fetchUserById",
   async (userId: string, { dispatch }) => {
     const response = await getRequest<UserResponse>(
-      `/users/getbyid/${userId}`,
+      `${GET_USER_BY_ID}/${userId}`,
       dispatch
     );
     return response;

@@ -50,7 +50,7 @@ const UserForm = () => {
 
   useEffect(() => {
     if (userId) {
-      const result = dispatch(fetchUserById(userId));
+      const result = dispatch(fetchUserById(userId)).unwrap();
       console.log("result", result);
     } else {
       reset({
@@ -64,7 +64,7 @@ const UserForm = () => {
       dispatch(clearAlert());
       reset();
     };
-  }, [userId, dispatch, reset]);
+  }, [userId]);
 
   useEffect(() => {
     if (user) {
@@ -75,17 +75,17 @@ const UserForm = () => {
         status: user.status || "active",
       });
     }
-  }, [user, reset]);
+  }, [user]);
 
-  const onSubmit = async (data: UserFormValues) => {
+  const onSubmit = (data: UserFormValues) => {
     try {
       if (userId) {
-        const result = await dispatch(
+        const result = dispatch(
           updateUser({ userId, userData: { ...data, _id: userId } })
         ).unwrap();
         console.log("User updated:", result);
       } else {
-        await dispatch(submitUser(data)).unwrap();
+        dispatch(submitUser(data)).unwrap();
       }
       navigate("/users");
     } catch (error) {
@@ -102,7 +102,7 @@ const UserForm = () => {
       }
       dispatch(clearAlert());
     }
-  }, [alert, dispatch]);
+  }, [alert]);
 
   return (
     <Container component="main" maxWidth="md">

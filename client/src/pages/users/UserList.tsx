@@ -21,7 +21,7 @@ import {
   useNavigate,
 } from "../../utils/commonImports";
 import "react-toastify/dist/ReactToastify.css";
-import { RootState, AppDispatch } from "../../store/configureStore";
+import { RootState, AppDispatch }  from "../../store/configureStore";
 import { deleteUser, fetchUsers } from "../../store/users/thunk";
 import { clearAlert } from "../../store/users/slice";
 import {
@@ -43,7 +43,8 @@ const UserList = () => {
 
   useEffect(() => {
     dispatch(fetchUsers());
-  }, [dispatch]);
+    console.log("dispatch", dispatch(fetchUsers()));
+  }, []);
 
   useEffect(() => {
     if (alert.message && !alertShown.current) {
@@ -56,7 +57,7 @@ const UserList = () => {
 
       dispatch(clearAlert());
     }
-  }, [alert, dispatch]);
+  }, [alert]);
 
   const usersWithIndex = users.map((user, index) => ({
     ...user,
@@ -75,7 +76,7 @@ const UserList = () => {
   const handleDelete = async () => {
     if (userToDelete) {
       try {
-        await dispatch(deleteUser(userToDelete)).unwrap();
+        dispatch(deleteUser(userToDelete)).unwrap();
         setOpenDialog(false);
       } catch (error) {
         console.error("Error deleting user:", error);
